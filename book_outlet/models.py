@@ -40,7 +40,7 @@ class Book(models.Model):
     rating = models.IntegerField()
     author = models.CharField(null=True, max_length=100)
     is_bestselling = models.BooleanField(default=False)
-    slug = models.SlugField(unique=True, null=False, db_index=True)  # Ensure unique slugs
+    slug = models.SlugField(default="", blank=True, null=False, db_index=True)  # Ensure unique slugs
 
     def save(self, *args, **kwargs):
         # Generate the slug if it doesn't already exist
