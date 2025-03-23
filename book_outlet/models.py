@@ -6,7 +6,7 @@ from django.utils.text import slugify
 
 # Create your models here.
 
-class Book(models.Model):
+"""class Book(models.Model):
     title = models.CharField(max_length=50)
     rating = models.IntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(5)]
@@ -16,14 +16,48 @@ class Book(models.Model):
     slug = models.SlugField(default="",null=False)
     
     def get_absolute_url(self):
-        return reverse("book-detail", args=[self.id])
+        return reverse("book-detail", args=[self.slug])
     
     def save(self, *args, **kwargs): 
         self.slug = slugify(self.title)
-        super.save(self, *args, **kwargs)
+        super().save(*args, **kwargs)
+        
+    def save(self, *args, **kwargs):
+        if not self.slug and self.title:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)    
     
     
     def __str__(self):
-        return f"{self.title} ({self.rating})" 
-    
-    
+        return f"{self.title} ({self.rating})"  """
+        
+
+#from django.db import models
+#from django.utils.text import slugify
+
+class Book(models.Model):
+    title = models.CharField(max_length=50)
+    rating = models.IntegerField()
+    author = models.CharField(null=True, max_length=100)
+    is_bestselling = models.BooleanField(default=False)
+    slug = models.SlugField(unique=True, null=False, db_index=True)  # Ensure unique slugs
+
+    def save(self, *args, **kwargs):
+        # Generate the slug if it doesn't already exist
+        if not self.slug and self.title:
+            self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
+
+    def get_absolute_url(self):
+        return reverse('book-detail', args=[self.slug])
+
+    def __str__(self):
+        return f"{self.title} ({self.rating})"
+
+
+
+
+
+
+
+
