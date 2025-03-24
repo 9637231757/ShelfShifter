@@ -67,7 +67,7 @@ class Book(models.Model):
     author = models.ForeignKey(Author, on_delete=models.CASCADE, null=True, related_name ="books")
     is_bestselling = models.BooleanField(default=False)
     slug = models.SlugField(default="", blank=True, null=False, db_index=True)  # Ensure unique slugs
-    publised_countries = models.ManyToManyField(Country)
+    published_countries = models.ManyToManyField(Country)
 
     def save(self, *args, **kwargs):
         # Generate the slug if it doesn't already exist
